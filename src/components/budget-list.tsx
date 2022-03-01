@@ -1,6 +1,6 @@
 import React, {useCallback, useRef } from 'react'
 import {  View } from 'moti'
-import {  ScrollView } from 'react-native-gesture-handler'
+import {  PanGestureHandlerProps, ScrollView } from 'react-native-gesture-handler'
 import {makeStyledComponent} from '../utils/styled'
 import BudgetItem from './budget-item'
 import { RefreshControl } from 'react-native'
@@ -18,12 +18,49 @@ interface BudgetItemData {
 interface BudgetListProps{
     data: Array<BudgetItemData>,
     onRefresh?: () => void,
-    refreshing: boolean
+    refreshing: boolean,
+    onRemoveItem: (item:BudgetItemData) => void
+}
+
+interface BudgetItemProps extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'>{
+    data: BudgetItemData,
+    onRemove: (item:BudgetItemData) => void
+}
+
+export const AnimatedBudgetItem = (props: BudgetItemProps) => {
+    const {
+        simultaneousHandlers,
+        data,
+        onRemove
+    } = props
+
+    const handleRemoveItem = useCallback(() => {
+        onRemove(data)
+    },[data, onRemove])
+
+    return (
+        <StyledView w="full" 
+        from={{
+            opacity:1,
+            scale:0.8,
+            marginBottom:1,
+            backgroundColor:'#FFFFFF'
+        }}>
+                    <BudgetItem 
+                        key={data.id}
+                        date={data.date}
+                        type={data.type}
+                        price={data.price}
+                        simultaneousHandlers={simultaneousHandlers}
+                        onRemove={handleRemoveItem}
+                    />
+        </StyledView>
+    )
 }
 
 export default function BudgetList(props: BudgetListProps){
     const {data, refreshing } = props
-    const {onRefresh} = props
+    const {onRefresh, onRemoveItem} = props
     const refScrollView = useRef(null)
     return (
         <ScrollView 
@@ -37,11 +74,11 @@ export default function BudgetList(props: BudgetListProps){
         >
             {
                 data.map(item => (
-                    <BudgetItem 
+                    <AnimatedBudgetItem
                         key={item.id}
-                        date={item.date}
-                        type={item.type}
-                        price={item.price}
+                        data={item}
+                        simultaneousHandlers={refScrollView}
+                        onRemove={onRemoveItem}
                     />
                 ))
             }

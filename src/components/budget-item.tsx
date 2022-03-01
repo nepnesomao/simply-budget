@@ -1,21 +1,44 @@
-import { VStack, Box, Text } from 'native-base'
-import React from 'react'
+import { HStack, Box, Text, Icon } from 'native-base'
+import React, { useCallback } from 'react'
+import { PanGestureHandlerProps } from 'react-native-gesture-handler'
+import SwipeableView from '../components/swipable-view'
+import { Feather } from '@expo/vector-icons'
 
-interface Props{
+interface Props extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'>{
     date:string,
     type:string,
-    price:string
+    price:string,
+    onRemove:() => void
 }
 const BudgetItem = (props: Props) => {
     const {date, type, price} = props
+    const {simultaneousHandlers, onRemove} = props
     return (
-        <VStack w="full" space={5} alignItems="center">
-            <Box style={{ width:'70%', padding:4, borderBottomWidth:1, borderBottomColor:'lightgray' }} mb={4}>
+        <SwipeableView 
+        simultaneousHandlers={simultaneousHandlers}
+        onSwipeLeft={onRemove}
+        backView={
+            <Box
+                w="full"
+                h="full"
+                bg="red.500"
+                alignItems="flex-end"
+                justifyContent="center"
+                pr={4}
+            >
+                <Icon color="white" as={<Feather name='trash-2' />}  size="sm" />
+            </Box>
+        }>
+        <HStack 
+        alignItems="center"
+        w="full">
+            <Box style={{ backgroundColor:'white', width:'100%',  borderBottomColor:'lightgray', padding:4 }}>
                 <Text>{date}</Text> 
                 <Text>{type}</Text> 
                 <Text>{price} TL</Text>
             </Box>
-        </VStack>
+        </HStack>
+        </SwipeableView>
     )
 }
 

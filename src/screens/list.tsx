@@ -24,6 +24,15 @@ const ListScreen = () => {
         fetch()
         setRefresh(false)
     }, [])
+
+    const handleRemove = useCallback((item) => {
+        setData(prev => {
+            const newData = prev.filter(i => i !== item)
+            return newData
+        })
+        AsyncStorage.setItem(BUDGET_ITEMS, JSON.stringify(data))
+        console.log(data)
+    }, [])
     return (
         <Center _dark={{ bg: 'blueGray.900' }} _light={{ bg: 'blueGray.50' }} flex={1}>
         <VStack space={1} p={4} alignItems="center" mt="-20px" w="full">
@@ -34,6 +43,7 @@ const ListScreen = () => {
                 data={data}
                 refreshing={refresh}
                 onRefresh={handleRefresh}
+                onRemoveItem={handleRemove}
             />
         </VStack>
     </Center>
