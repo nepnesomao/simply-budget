@@ -12,7 +12,8 @@ interface BudgetItemData {
     id: string,
     date:string,
     type:string,
-    price:string
+    price:string,
+    desc?:string
 }
 
 interface BudgetListProps{
@@ -51,6 +52,7 @@ export const AnimatedBudgetItem = (props: BudgetItemProps) => {
                         date={data.date}
                         type={data.type}
                         price={data.price}
+                        desc={data.desc}
                         simultaneousHandlers={simultaneousHandlers}
                         onRemove={handleRemoveItem}
                     />

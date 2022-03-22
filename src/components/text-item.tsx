@@ -4,11 +4,12 @@ import { Box, Input } from 'native-base'
 interface Props{
     placeholderText: string,
     handleInputText?: (item: string) => void ,
-    text:string
+    text:string,
+    style?:any
 }
 
 const TextItem = (props: Props) => {
-    const { placeholderText, text} = props
+    const { placeholderText, text, style} = props
     const { handleInputText } = props
 
     return (
@@ -16,7 +17,8 @@ const TextItem = (props: Props) => {
             <Input 
             value={text}
             placeholder={placeholderText} 
-            onChangeText={handleInputText} />
+            onChangeText={handleInputText}
+            style={style} />
         </Box>
     )
 }

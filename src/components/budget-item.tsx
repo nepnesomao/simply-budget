@@ -8,10 +8,11 @@ interface Props extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'>{
     date:string,
     type:string,
     price:string,
+    desc?:string,
     onRemove:() => void
 }
 const BudgetItem = (props: Props) => {
-    const {date, type, price} = props
+    const {date, type, price,desc} = props
     const {simultaneousHandlers, onRemove} = props
     return (
         <SwipeableView 
@@ -36,6 +37,7 @@ const BudgetItem = (props: Props) => {
                 <Text>{date}</Text> 
                 <Text>{type}</Text> 
                 <Text>{price} TL</Text>
+                <Text>{desc}</Text>
             </Box>
         </HStack>
         </SwipeableView>
